@@ -50,7 +50,7 @@ const RemoteTeam: FC<{
         setShowLoading(false);
       }
     },
-    []
+    [props.fetchUrl]
   );
 
   useEffect(() => {
