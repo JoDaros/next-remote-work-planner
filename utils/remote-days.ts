@@ -33,7 +33,7 @@ export function getRemoteDays(
   let daysOfWeek: number[];
   const aux = firstDay;
   while (aux < lastDay && aux !== lastDay) {
-    inputMoment = moment(getMonday(aux));
+    inputMoment = moment(aux);
     initialMoment = moment(initialWeek);
     diff = moment.duration(inputMoment.diff(initialMoment));
     diffWeeks = Math.floor(diff.asWeeks());

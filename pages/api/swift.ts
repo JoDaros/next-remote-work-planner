@@ -7,7 +7,7 @@ import {
 } from "../../utils/remote-days";
 
 type Data = {
-  monthRemoteDays: Date[];
+  monthRemoteDays: string[];
 };
 
 const remoteWeeks = [
@@ -45,7 +45,7 @@ export default function handler(
         remoteWeeks
       );
       res.status(200).json({
-        monthRemoteDays: remoteDays,
+        monthRemoteDays: remoteDays.map((d) => moment(d).format("YYYY-MM-DD")),
       });
     } catch (error) {
       console.log(error);

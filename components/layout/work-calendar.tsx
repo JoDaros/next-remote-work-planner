@@ -1,6 +1,7 @@
 import { Calendar } from "@mantine/dates";
 import { FC, useState } from "react";
 import { useMantineTheme } from "@mantine/core";
+import moment from "moment";
 
 const minDate = new Date(2021, 10, 4);
 
@@ -21,8 +22,10 @@ const WorkCalendar: FC<{
       maxDate={maxDate}
       dayStyle={(date, modifiers) => {
         if (props.highlightedDays && props.highlightedDays.length > 0) {
-          for (const highlightedDays of props.highlightedDays) {
-            if (highlightedDays.getTime() === date.getTime()) {
+          const dateString = moment(date).format("YYYY-MM-DD");
+
+          for (const highlightedDay of props.highlightedDays) {
+            if (moment(highlightedDay).format("YYYY-MM-DD") === dateString) {
               return {
                 backgroundColor: theme.colors.cyan[9],
                 color: theme.white,
