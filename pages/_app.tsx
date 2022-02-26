@@ -18,12 +18,14 @@ import {
 import MainLinks from "../components/layout/main-links";
 import React, { useState } from "react";
 import ThemeButton from "../components/layout/ThemeButton";
+import { useMediaQuery } from "@mantine/hooks";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const [opened, setOpened] = useState(false);
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const theme = useMantineTheme();
+  const largeScreen = useMediaQuery("(min-width: 600px)");
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -104,7 +106,9 @@ export default function App(props: AppProps) {
                     />
                   </MediaQuery>
                   <Group position="apart" style={{ width: "100%" }}>
-                    <Title order={2}>Remote Work Planner</Title>
+                    <Title order={largeScreen ? 2 : 4}>
+                      Remote Work Planner
+                    </Title>
                     <ThemeButton />
                   </Group>
                 </div>

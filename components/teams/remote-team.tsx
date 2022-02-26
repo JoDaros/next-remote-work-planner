@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import RedCircleIcon from "../layout/icon/red-circle-icon";
 import WorkCalendar from "../layout/work-calendar";
+import { useMediaQuery } from "@mantine/hooks";
 
 const RemoteTeam: FC<{
   fetchUrl: string;
@@ -26,6 +27,7 @@ const RemoteTeam: FC<{
   const [showError, setShowError] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const theme = useMantineTheme();
+  const largeScreen = useMediaQuery("(min-width: 600px)");
 
   const requestRemoteDaysFromServer = useCallback(
     async (startDate: Date, group: string) => {
@@ -90,16 +92,19 @@ const RemoteTeam: FC<{
             value={selectedGroup}
             onChange={changeGroupHandler}
             data={props.groups}
+            size={largeScreen ? "sm" : "xs"}
           />
           <WorkCalendar
             onMonthChange={changeMonthHandler}
             highlightedDays={remoteDays}
           />
-          <Space h="md" />
           {selectedGroup !== "0" && (
             <Group align="center" position="center">
-              <ColorSwatch color={theme.colors.cyan[9]} />
-              <Text color="dimmed" size="sm">
+              <ColorSwatch
+                color={theme.colors.cyan[9]}
+                size={largeScreen ? 30 : 20}
+              />
+              <Text color="dimmed" size={largeScreen ? "sm" : "xs"}>
                 Remote Days
               </Text>
             </Group>

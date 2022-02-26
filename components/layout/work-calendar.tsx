@@ -1,9 +1,11 @@
 import { Calendar } from "@mantine/dates";
 import { FC, useState } from "react";
-import { useMantineTheme } from "@mantine/core";
+import { MantineSize, useMantineTheme } from "@mantine/core";
 import moment from "moment";
+import { useMediaQuery } from "@mantine/hooks";
 
 const minDate = new Date(2021, 10, 4);
+const comparisonFormat = "YYYY-MM-DD";
 
 const WorkCalendar: FC<{
   highlightedDays: Date[];
@@ -13,6 +15,8 @@ const WorkCalendar: FC<{
   const currentDate = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 2);
+
+  const largeScreen = useMediaQuery("(min-width: 600px)");
 
   return (
     <Calendar
@@ -37,7 +41,7 @@ const WorkCalendar: FC<{
         return {};
       }}
       fullWidth
-      size="xl"
+      size={largeScreen ? "xl" : "md"}
       styles={(theme) => ({
         calendarBase: {
           justifyContent: "center",
@@ -49,10 +53,11 @@ const WorkCalendar: FC<{
               : theme.colors.gray[2]
           }`,
         },
-        day: { borderRadius: 0, height: 70, fontSize: theme.fontSizes.lg },
-        weekday: { fontSize: theme.fontSizes.lg },
+        day: {
+          borderRadius: 0,
+        },
         weekdayCell: {
-          fontSize: theme.fontSizes.xl,
+          fontSize: theme.fontSizes.md,
           backgroundColor:
             theme.colorScheme === "dark"
               ? theme.colors.dark[5]
@@ -62,7 +67,12 @@ const WorkCalendar: FC<{
               ? theme.colors.dark[4]
               : theme.colors.gray[2]
           }`,
-          height: 70,
+        },
+        weekend: {
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[5]
+              : theme.colors.gray[1],
         },
       })}
     />
