@@ -24,6 +24,14 @@ const MainLinks: FC<{
     }
   };
 
+  let initialTab: number;
+
+  if (router.pathname === "/dos") {
+    initialTab = 0;
+  } else {
+    initialTab = 1;
+  }
+
   return (
     <Group direction="column" grow>
       <Divider my="xs" label="Department/Teams" labelPosition="center" />
@@ -31,6 +39,7 @@ const MainLinks: FC<{
         orientation="vertical"
         variant="unstyled"
         onTabChange={changeTabHandler}
+        initialTab={initialTab}
         styles={(theme) => ({
           tabControl: {
             backgroundColor:
