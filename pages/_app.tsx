@@ -23,9 +23,11 @@ import { useMediaQuery } from "@mantine/hooks";
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const [opened, setOpened] = useState(false);
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const theme = useMantineTheme();
   const largeScreen = useMediaQuery("(min-width: 600px)");
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(
+    largeScreen ? "light" : "dark"
+  );
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
