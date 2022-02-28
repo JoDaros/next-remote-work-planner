@@ -11,12 +11,12 @@ type Data = {
 };
 
 const remoteWeeks = [
-  [1, 2, 3],
-  [3, 4, 5],
+  [1, 2],
+  [4, 5],
 ];
 
 const initialWeek = new Date(2021, 10, 4);
-const initialState = [2, 1];
+const initialState = [1, 2];
 
 export default function handler(
   req: NextApiRequest,
