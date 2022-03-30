@@ -19,6 +19,7 @@ export function getRemoteDays(
   const inputDate = new Date(queryDate);
   const remoteDays: Date[] = [];
   const firstDay = new Date(inputDate.getFullYear(), inputDate.getMonth(), 1);
+  console.log("First day:", firstDay);
   const lastDay = new Date(
     inputDate.getFullYear(),
     inputDate.getMonth() + 1,
@@ -33,7 +34,7 @@ export function getRemoteDays(
   let daysOfWeek: number[];
   const aux = firstDay;
   while (aux < lastDay && aux !== lastDay) {
-    inputMoment = moment(aux);
+    inputMoment = moment(aux).startOf("week");
     initialMoment = moment(initialWeek);
     diff = moment.duration(inputMoment.diff(initialMoment));
     diffWeeks = Math.floor(diff.asWeeks());

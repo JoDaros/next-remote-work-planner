@@ -86,7 +86,7 @@ export default function App(props: AppProps) {
                     >
                       <Divider />
                       <Text color="dimmed" size="xs">
-                        João Barros © - Version 2.2 (2022-02-28)
+                        João Barros © - Version 2.3 (2022-03-31)
                       </Text>
                     </div>
                   </div>
