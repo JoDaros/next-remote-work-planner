@@ -10,24 +10,16 @@ type Data = {
   monthRemoteDays: string[];
 };
 
-const remoteWeeks = [
+export const remoteWeeks = [
   [1, 5],
   [4, 5],
   [3, 4],
   [2, 3],
   [1, 2],
 ];
-// const initialWeek = new Date(2022, 2, 21);
-// const initialState = {
-//   1: 1,
-//   2: 5,
-//   3: 4,
-//   4: 3,
-//   5: 2,
-// };
 
-const initialWeek = new Date(2021, 10, 4);
-const initialState = [1, 5, 4, 3, 2];
+export const initialWeek = new Date(2021, 10, 4);
+export const initialState = [1, 5, 4, 3, 2];
 
 export default function handler(
   req: NextApiRequest,
@@ -54,7 +46,7 @@ export default function handler(
         initialState,
         initialWeek,
         remoteWeeks
-      );
+      ).map(remoteDay => remoteDay.date);
 
       res.status(200).json({
         monthRemoteDays: remoteDays.map((d) => moment(d).format("YYYY-MM-DD")),
