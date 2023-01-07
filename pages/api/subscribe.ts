@@ -11,27 +11,24 @@ import {
   remoteWeeks as swiftRemoteWeeks,
 } from "./swift";
 import moment from "moment/moment";
+import { getStringFromQueryParam } from "../../components/libs/api/api-utils";
 import { getICSFileContent, getRemoteDaysForPeriod } from "../../utils/export-utils";
 
-interface ExportNextApiRequest extends NextApiRequest {
+interface SubscribeNextApiRequest extends NextApiRequest {
   query: {
     team: string;
-    startDate: string;
-    endDate: string;
     group: string;
+    interval: string;
   };
 }
 
-export default function handler(req: ExportNextApiRequest, res: NextApiResponse) {
+export default function handler(req: SubscribeNextApiRequest, res: NextApiResponse) {
   const {
-    query: { team, startDate: startDateStr, endDate: endDateStr, group },
+    query: { team, group, interval },
     method,
   } = req;
 
   if (method === "GET") {
-    const startDate = moment(startDateStr).startOf("isoWeek").toDate();
-    const endDate = new Date(endDateStr);
-
     let initialState: number[];
     let initialWeek: Date;
     let remoteWeeks: number[][];
@@ -49,13 +46,33 @@ export default function handler(req: ExportNextApiRequest, res: NextApiResponse)
       return;
     }
 
-    if (startDate >= endDate) {
-      res.status(400).send("Start date is equal or after end date");
+    if (Number.isNaN(group)) {
+      res.status(400).send("Group must be numeric");
       return;
     }
 
+    if (Number.isNaN(team)) {
+      res.status(400).send("Team must be numeric");
+      return;
+    }
+
+    const groupNumber = Number(group);
+
+    if (groupNumber < 1 || groupNumber > 5) {
+      res.status(400).send("Invalid group number");
+      return;
+    }
+
+    if (interval !== "1" && interval !== "3" && interval !== "6") {
+      res.status(400).send("Invalid interval number");
+      return;
+    }
+
+    const startDate = moment().startOf("isoWeek").toDate();
+    const endDate = moment(startDate).add(interval, "month").toDate();
+
     if (moment(new Date(endDate)).diff(new Date(startDate), "months", true) > 12) {
-      res.status(400).send("Cannot export more than 1 year");
+      res.status(400).send("Cannot subscribe to more than 1 year");
       return;
     }
 
@@ -72,11 +89,10 @@ export default function handler(req: ExportNextApiRequest, res: NextApiResponse)
       const icsContent = getICSFileContent(remoteDays, group, team);
       res
         .status(200)
-        .setHeader("Content-disposition", "attachment; filename=remote-days.ics")
         .setHeader("Content-type", "text/calendar;method=REQUEST;charset=utf-8")
         .send(icsContent);
     } else {
-      res.status(204).end();
+      res.status(400).end("No remote days found for subscription");
       return;
     }
   }

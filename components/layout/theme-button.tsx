@@ -1,6 +1,6 @@
 import { ActionIcon, useMantineColorScheme } from "@mantine/core";
-import { SunIcon, MoonIcon } from "@modulz/radix-icons";
 import { useMediaQuery } from "@mantine/hooks";
+import { RxMoon, RxSun } from "react-icons/rx";
 
 function ThemeButton() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -17,9 +17,9 @@ function ThemeButton() {
       size={largeScreen ? "xl" : "lg"}
     >
       {dark ? (
-        <SunIcon style={{ width: 18, height: 18 }} />
+        <RxSun style={{ width: 18, height: 18 }} />
       ) : (
-        <MoonIcon style={{ width: 18, height: 18 }} />
+        <RxMoon style={{ width: 18, height: 18 }} />
       )}
     </ActionIcon>
   );

@@ -8,6 +8,7 @@ const DOS: NextPage = () => {
     <Fragment>
       <RemoteTeam
         fetchUrl="/api/dos"
+        name="dos"
         groups={[
           { label: "Group 1", value: "1" },
           { label: "Group 2", value: "2" },

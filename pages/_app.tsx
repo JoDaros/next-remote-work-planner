@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import MainLinks from "../components/layout/main-links";
 import React, { useState } from "react";
-import ThemeButton from "../components/layout/ThemeButton";
+import ThemeButton from "../components/layout/theme-button";
 import { useMediaQuery } from "@mantine/hooks";
 
 export default function App(props: AppProps) {
@@ -25,9 +25,7 @@ export default function App(props: AppProps) {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
   const largeScreen = useMediaQuery("(min-width: 600px)");
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(
-    largeScreen ? "light" : "dark"
-  );
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(largeScreen ? "light" : "dark");
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -40,40 +38,22 @@ export default function App(props: AppProps) {
     <>
       <Head>
         <title>Remote Work Planner</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-        <meta
-          name="description"
-          content="Find which days you are working from home"
-        />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta name="description" content="Find which days you are working from home" />
       </Head>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          theme={{ colorScheme }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <AppShell
             navbarOffsetBreakpoint="sm"
             fixed
             navbar={
-              <Navbar
-                padding="md"
-                hiddenBreakpoint="sm"
-                hidden={!opened}
-                width={{ sm: 250, lg: 350 }}
-              >
+              <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 350 }}>
                 <div>
                   <MainLinks onClickLink={closeBurgerHandler} />
                   <div
                     style={{
-                      position: "absolute",
-                      bottom: 20,
+                      paddingTop: 40,
+                      bottom: 0,
                       left: 0,
                       width: "100%",
                     }}
@@ -86,7 +66,7 @@ export default function App(props: AppProps) {
                     >
                       <Divider />
                       <Text color="dimmed" size="xs">
-                        João Barros © - Version 2.3 (2022-03-31)
+                        João Barros © - Version 2.4.1 (2023-01-11)
                       </Text>
                     </div>
                   </div>
@@ -94,7 +74,7 @@ export default function App(props: AppProps) {
               </Navbar>
             }
             header={
-              <Header height={70} padding="md" color={theme.colors.gray[6]}>
+              <Header height={70} p="md" color={theme.colors.gray[6]}>
                 <div
                   style={{
                     display: "flex",
@@ -112,9 +92,7 @@ export default function App(props: AppProps) {
                     />
                   </MediaQuery>
                   <Group position="apart" style={{ width: "100%" }}>
-                    <Title order={largeScreen ? 2 : 4}>
-                      Remote Work Planner
-                    </Title>
+                    <Title order={largeScreen ? 2 : 4}>Remote Work Planner</Title>
                     <ThemeButton />
                   </Group>
                 </div>

@@ -6,6 +6,7 @@ const HalRaz: NextPage = () => {
   return (
     <RemoteTeam
       fetchUrl="/api/swift"
+      name="swift"
       groups={[
         { label: "HAL", value: "1" },
         { label: "RAZ", value: "2" },
