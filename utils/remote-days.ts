@@ -14,38 +14,30 @@ export function getRemoteDays(
   remoteWeeks: number[][]
 ): RemoteDay[] {
   const remoteDays: RemoteDay[] = [];
-  // first day of the month or initial week
-  const firstDay = moment(startDate < initialWeek ? initialWeek : startDate).startOf("day");
-  //last friday of the month
-  const lastDay = moment(firstDay).add(1, "month").weekday(5).toDate();
-
-  let inputMoment: Moment;
-  let diffWeeks: number;
   let weekType: number;
   let daysOfWeek: number[];
   let weekSequence = 1;
 
-  const initialMoment = moment([
-    initialWeek.getUTCFullYear(),
-    initialWeek.getUTCMonth(),
-    initialWeek.getUTCDay(),
-    0,
-    0,
-  ]);
+  // first day of the month or initial week
+  const firstDay = moment(startDate < initialWeek ? initialWeek : startDate).startOf("day");
+  //last friday of the month
+  const lastDay = moment(firstDay).add(1, "month").weekday(5);
 
-  const controlDay = firstDay.clone();
-  while (controlDay.isSameOrBefore(lastDay, "isoWeek")) {
-    inputMoment = controlDay.clone().startOf("isoWeek");
-    diffWeeks = inputMoment.diff(initialMoment, "week", false).valueOf();
-    weekType = (diffWeeks + initialState[+group - 1]) % remoteWeeks.length;
+  const diffWeeksToLastDay = Math.ceil(lastDay.diff(firstDay, "week", true).valueOf());
+  const diffWeeksToInitialDate = firstDay.diff(initialWeek, "week", false).valueOf();
+  const firstDayOfWeek = firstDay.clone().startOf("isoWeek");
+
+  for (let i = 0; i <= diffWeeksToLastDay; ++i) {
+    weekType = (diffWeeksToInitialDate + i + initialState[+group - 1]) % remoteWeeks.length;
     weekType = weekType === 0 ? remoteWeeks.length : weekType;
     daysOfWeek = remoteWeeks[weekType - 1];
     weekSequence = 1;
+
     for (const dayOfWeek of daysOfWeek) {
-      remoteDays.push({ date: inputMoment.day(dayOfWeek).toDate(), weekSequence });
+      remoteDays.push({ date: firstDayOfWeek.clone().day(dayOfWeek).toDate(), weekSequence });
       ++weekSequence;
     }
-    controlDay.add(7, "days");
+    firstDayOfWeek.add("1", "week");
   }
 
   return remoteDays;

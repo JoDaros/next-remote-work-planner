@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Description
+
+Remote Work Planner is a Next.js based app designed to manage remote work schedules for teams and groups. The app features an algorithm that calculates remote work days based on customizable rules for each week of the month. Users can view the scheduled remote days on the web interface and can also export it to their calendar via subscription or download options. The app aims to help teams and groups to stay organized and on top of their remote schedule.
 
 ## Getting Started
 
