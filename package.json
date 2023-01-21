@@ -9,12 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^5.9.6",
-    "@mantine/dates": "^5.9.6",
-    "@mantine/hooks": "^5.9.6",
-    "@mantine/modals": "^5.9.6",
-    "@mantine/next": "^5.9.6",
-    "@mantine/notifications": "^5.9.6",
+    "@mantine/core": "^5.10.1",
+    "@mantine/dates": "^5.10.1",
+    "@mantine/hooks": "^5.10.1",
+    "@mantine/modals": "^5.10.1",
+    "@mantine/next": "^5.10.1",
+    "@mantine/notifications": "^5.10.1",
     "dayjs": "^1.10.7",
     "ics": "^2.41.0",
     "moment": "^2.29.1",

@@ -11,7 +11,6 @@ const WorkCalendar: FC<{
   onMonthChange: (month: Date) => void;
 }> = (props) => {
   const theme = useMantineTheme();
-  const currentDate = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 2);
 
@@ -28,10 +27,9 @@ const WorkCalendar: FC<{
   }));
 
   const { classes, cx } = useStyles();
-
   return (
     <Calendar
-      value={currentDate}
+      value={new Date()}
       onMonthChange={props.onMonthChange}
       onChange={() => {}}
       minDate={minDate}
