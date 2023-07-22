@@ -1,5 +1,5 @@
 import { Button, Flex, Modal, Select, Space, Text } from "@mantine/core";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import moment from "moment/moment";
 import { ErrorMessage } from "./notification";
 import AndroidHelperAccordion from "./android-helper-accordion";
@@ -61,7 +61,7 @@ const SubscribeModal: FC<{
     props.onClose();
   };
 
-  const exportHandler = async () => {
+  const exportHandler = useCallback(async () => {
     setLoading(true);
     if (!interval) {
       return;
@@ -110,17 +110,10 @@ const SubscribeModal: FC<{
     }
     setLoading(false);
     props.onClose();
-  };
+  }, [interval, props.group, props.team, props.onError, props.onClose]);
 
   return (
-    <Modal
-      opened={props.opened}
-      onClose={props.onClose}
-      title="Subscription Options"
-      transition="fade"
-      transitionDuration={600}
-      transitionTimingFunction="ease"
-    >
+    <Modal opened={props.opened} onClose={props.onClose} title="Subscription Options">
       <Flex direction="column" gap="md">
         <Space />
         <Text size="sm">

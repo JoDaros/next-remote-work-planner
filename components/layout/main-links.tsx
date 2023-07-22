@@ -31,7 +31,7 @@ const MainLinks: FC<{
             border: `1px solid ${
               theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
             }`,
-            padding: `${theme.spacing.lg * 1.5}px ${theme.spacing.xl * 1.5}px`,
+            padding: `30px`,
             cursor: "pointer",
             fontSize: theme.fontSizes.md,
             display: "flex",
