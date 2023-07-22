@@ -103,9 +103,14 @@ const RemoteTeam: FC<{
     document.cookie = `team=${props.name};max-age=15780000`; // 6 months
   };
 
-  const errorHandler = (error: ErrorMessage) => {
-    setError(error);
-  };
+  const errorHandler = useCallback(
+    () => (error: ErrorMessage) => {
+      setError(error);
+    },
+    []
+  );
+
+  const closeExportHandler = useCallback(() => setExportOpen(false), []);
 
   const errorAlertHandler = () => {
     setError({ show: false });
@@ -130,7 +135,7 @@ const RemoteTeam: FC<{
               <Group align="center" position="center">
                 <ColorSwatch color={theme.colors.cyan[9]} size={largeScreen ? 30 : 20} />
                 <Text color="dimmed" size={largeScreen ? "sm" : "xs"}>
-                  Remote Days
+                  Remote Work
                 </Text>
               </Group>
             ) : (
@@ -150,7 +155,7 @@ const RemoteTeam: FC<{
             startDate={selectedDate}
             team={props.name}
             onError={errorHandler}
-            onClose={() => setExportOpen(false)}
+            onClose={closeExportHandler}
           />
           <Space h="md" />
           <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
