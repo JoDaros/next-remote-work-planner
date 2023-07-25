@@ -1,6 +1,6 @@
-import { Calendar } from "@mantine/dates";
-import { FC } from "react";
-import { createStyles, useMantineTheme } from "@mantine/core";
+import { Calendar, DatePicker } from "@mantine/dates";
+import React, { FC } from "react";
+import { createStyles, CSSObject, Sx, useMantineTheme } from "@mantine/core";
 import moment from "moment";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -15,65 +15,92 @@ const WorkCalendar: FC<{
   maxDate.setFullYear(maxDate.getFullYear() + 2);
 
   const largeScreen = useMediaQuery("(min-width: 600px)");
+  const currentDate = new Date();
 
-  const useStyles = createStyles((theme) => ({
-    outside: {
-      opacity: 1,
-    },
-    weekend: {
-      color: `${theme.colors.red[5]} !important`,
-      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1],
-    },
-  }));
+  const selectedDayStyles: CSSObject = React.useMemo(
+    () => ({
+      backgroundColor: theme.colors.blue,
+      color: theme.colorScheme === "dark" ? theme.white : theme.colors.dark[6],
+    }),
+    [theme.colorScheme, theme.colors.blue, theme.colors.dark, theme.white]
+  );
 
-  const { classes, cx } = useStyles();
+  const remoteWorkStyles: CSSObject = React.useMemo(
+    () => ({
+      borderColor: theme.colors.cyan[9],
+      borderStyle: "solid",
+      borderWidth: 3,
+      borderRadius: "50%",
+      color: theme.colorScheme === "dark" ? theme.white : theme.colors.dark,
+    }),
+    [theme.colorScheme, theme.colors.cyan, theme.colors.dark, theme.white]
+  );
+
   return (
     <Calendar
-      value={new Date()}
-      onMonthChange={props.onMonthChange}
-      onChange={() => {}}
+      onMonthSelect={props.onMonthChange}
       minDate={minDate}
       maxDate={maxDate}
-      dayClassName={(date, modifiers) =>
-        cx({ [classes.outside]: modifiers.outside, [classes.weekend]: modifiers.weekend })
-      }
-      dayStyle={(date) => {
+      static
+      getDayProps={(date) => {
         if (props.highlightedDays && props.highlightedDays.length > 0) {
           for (const highlightedDay of props.highlightedDays) {
             if (moment(date).isSame(moment(highlightedDay), "day")) {
               return {
-                backgroundColor: theme.colors.cyan[9],
-                color: theme.white,
+                sx:
+                  date.getDate() === currentDate.getDate() &&
+                  date.getMonth() === currentDate.getMonth() &&
+                  date.getFullYear() === currentDate.getFullYear()
+                    ? { ...remoteWorkStyles, ...selectedDayStyles }
+                    : remoteWorkStyles,
               };
             }
           }
+        }
+        if (
+          date.getDate() === currentDate.getDate() &&
+          date.getMonth() === currentDate.getMonth() &&
+          date.getFullYear() === currentDate.getFullYear()
+        ) {
+          return {
+            sx: selectedDayStyles,
+          };
+        } else {
           return {};
         }
-        return {};
       }}
-      fullWidth
-      size={largeScreen ? "xl" : "md"}
-      styles={(theme) => ({
-        calendarBase: {
+      getMonthControlProps={(date) => {
+        if (
+          date.getMonth() === currentDate.getMonth() &&
+          date.getFullYear() === currentDate.getFullYear()
+        ) {
+          return {
+            sx: selectedDayStyles,
+          };
+        } else {
+          return {};
+        }
+      }}
+      getYearControlProps={(date) => {
+        if (date.getFullYear() === currentDate.getFullYear()) {
+          return {
+            sx: selectedDayStyles,
+          };
+        } else {
+          return {};
+        }
+      }}
+      size={largeScreen ? "xl" : undefined}
+      styles={{
+        calendar: {
           justifyContent: "center",
-        },
-        cell: {
-          border: `1px solid ${
-            theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-          }`,
+          display: "flex",
         },
         day: {
-          borderRadius: 0,
+          "&[data-selected]": selectedDayStyles,
+          textAlign: "center",
         },
-        weekdayCell: {
-          fontSize: theme.fontSizes.md,
-          backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[0],
-          border: `1px solid ${
-            theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-          }`,
-        },
-      })}
+      }}
     />
   );
 };

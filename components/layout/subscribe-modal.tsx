@@ -1,5 +1,5 @@
 import { Button, Flex, Modal, Select, Space, Text } from "@mantine/core";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import moment from "moment/moment";
 import { ErrorMessage } from "./notification";
 import AndroidHelperAccordion from "./android-helper-accordion";
@@ -61,66 +61,62 @@ const SubscribeModal: FC<{
     props.onClose();
   };
 
-  const exportHandler = async () => {
-    setLoading(true);
-    if (!interval) {
-      return;
-    }
-    const startDate = moment();
-    const endDate = moment(new Date()).add(interval, "month");
-    const response = await fetch(
-      "/api/export" +
-        "?" +
-        new URLSearchParams({
-          startDate: startDate.format("YYYY-MM-DD"),
-          endDate: endDate.format("YYYY-MM-DD"),
-          group: props.group,
-          team: props.team,
-        })
-    );
-
-    if (response && response.ok && response.status === 200) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(
-        new Blob([blob], { type: "text/calendar;charset=utf-8" })
-      );
-      let a = document.createElement("a");
-      a.href = url;
-      const ts = moment().format("YYMMDDHHmmss");
-      a.download = `rwprd_${props.team}_${props.group}_${ts}.ics`;
-      a.click();
-      props.onError({ show: false });
-    } else {
-      if (response.status === 204) {
-        props.onError({
-          show: true,
-          message: "No remote days found for the selected range",
-          title: "No results available",
-          severity: "warning",
-        });
-      } else {
-        const errorMessage = await response.blob().then((blob) => blob.text());
-        props.onError({
-          show: true,
-          message: errorMessage,
-          title: "Export Error",
-          severity: "error",
-        });
+  const exportHandler = useCallback(
+    () => async () => {
+      setLoading(true);
+      if (!interval) {
+        return;
       }
-    }
-    setLoading(false);
-    props.onClose();
-  };
+      const startDate = moment();
+      const endDate = moment(new Date()).add(interval, "month");
+      const response = await fetch(
+        "/api/export" +
+          "?" +
+          new URLSearchParams({
+            startDate: startDate.format("YYYY-MM-DD"),
+            endDate: endDate.format("YYYY-MM-DD"),
+            group: props.group,
+            team: props.team,
+          })
+      );
+
+      if (response && response.ok && response.status === 200) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(
+          new Blob([blob], { type: "text/calendar;charset=utf-8" })
+        );
+        let a = document.createElement("a");
+        a.href = url;
+        const ts = moment().format("YYMMDDHHmmss");
+        a.download = `rwprd_${props.team}_${props.group}_${ts}.ics`;
+        a.click();
+        props.onError({ show: false });
+      } else {
+        if (response.status === 204) {
+          props.onError({
+            show: true,
+            message: "No remote days found for the selected range",
+            title: "No results available",
+            severity: "warning",
+          });
+        } else {
+          const errorMessage = await response.blob().then((blob) => blob.text());
+          props.onError({
+            show: true,
+            message: errorMessage,
+            title: "Export Error",
+            severity: "error",
+          });
+        }
+      }
+      setLoading(false);
+      props.onClose();
+    },
+    [interval, props.group, props.team, props.onError, props.onClose]
+  );
 
   return (
-    <Modal
-      opened={props.opened}
-      onClose={props.onClose}
-      title="Subscription Options"
-      transition="fade"
-      transitionDuration={600}
-      transitionTimingFunction="ease"
-    >
+    <Modal opened={props.opened} onClose={props.onClose} title="Subscription Options">
       <Flex direction="column" gap="md">
         <Space />
         <Text size="sm">
